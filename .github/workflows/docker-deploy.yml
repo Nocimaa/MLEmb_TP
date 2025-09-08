@@ -27,13 +27,13 @@ jobs:
     - name: Build Docker image
       run: |
         echo "🛠️ Building Docker image..."
-        docker build -t Nocima/am-fastapi-app:latest .
+        docker build -t nocima/am-fastapi-app:latest .
 
     # 4️⃣ Push l'image sur Docker Hub
     - name: Push Docker image
       run: |
         echo "🚀 Pushing Docker image to Docker Hub..."
-        docker push Nocima/am-fastapi-app:latest
+        docker push nocima/am-fastapi-app:latest
 
     # 5️⃣ Déployer sur le serveur (exemple SSH)
     - name: Deploy to server
@@ -46,8 +46,8 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
           echo "🛳️ Pulling latest Docker image..."
-          docker pull Nocima/am-fastapi-app:latest
+          docker pull nocima/am-fastapi-app:latest
           docker stop am-fastapi-app || true
           docker rm am-fastapi-app || true
-          docker run -d -p 8081:8081 --name am-fastapi-app Nocima/am-fastapi-app:latest
+          docker run -d -p 8081:8081 --name am-fastapi-app nocima/am-fastapi-app:latest
           echo "✅ Deployment complete!"
