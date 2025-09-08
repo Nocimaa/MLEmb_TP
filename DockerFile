@@ -10,11 +10,10 @@ WORKDIR /app
 RUN pip install scikit-learn pandas uvicorn fastapi joblib
 
 # Copier tout le projet dans le conteneur
-COPY ./app ./app
+COPY ./model ./app
 
 # Exposer le port 80 du conteneur
-EXPOSE 80
+EXPOSE 8081
 
-RUN python train_model.py
 # Commande pour lancer Uvicorn
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8081"]
