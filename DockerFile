@@ -1,0 +1,20 @@
+# Utilise une image Python officielle légère
+FROM python:3.11-slim
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier le fichier requirements.txt
+
+# Installer les dépendances
+RUN pip install scikit-learn pandas uvicorn fastapi joblib
+
+# Copier tout le projet dans le conteneur
+COPY ./app ./app
+
+# Exposer le port 80 du conteneur
+EXPOSE 80
+
+RUN python train_model.py
+# Commande pour lancer Uvicorn
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
