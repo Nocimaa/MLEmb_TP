@@ -16,7 +16,7 @@ jobs:
 
     # 2️⃣ Login Docker
     - name: Log in to Docker Hub
-      run: echo "🔑 Logging into Docker Hub... ${{ DOCKER_USERNAME }}"
+      run: echo "🔑 Logging into Docker Hub... ${{ secrets.DOCKER_USERNAME }}"
     - name: Docker login
       uses: docker/login-action@v2
       with:
