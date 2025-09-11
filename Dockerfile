@@ -10,7 +10,8 @@ WORKDIR /app
 RUN pip install scikit-learn pandas uvicorn fastapi joblib
 
 # Copier tout le projet dans le conteneur
-COPY ./model ./
+# COPY ./model ./
+COPY ./bonus ./
 
 # Exposer le port 80 du conteneur
 EXPOSE 8081
