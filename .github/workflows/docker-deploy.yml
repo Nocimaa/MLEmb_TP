@@ -4,17 +4,17 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'tp1/**'
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # 1️⃣ Checkout le repo
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # 2️⃣ Login Docker
     - name: Log in to Docker Hub
       run: echo "🔑 Logging into Docker Hub... ${{ secrets.DOCKER_USERNAME }}"
     - name: Docker login
@@ -23,19 +23,16 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    # 3️⃣ Build l'image Docker
     - name: Build Docker image
       run: |
         echo "🛠️ Building Docker image..."
         docker build -t nocima/am-fastapi-app:latest .
 
-    # 4️⃣ Push l'image sur Docker Hub
     - name: Push Docker image
       run: |
         echo "🚀 Pushing Docker image to Docker Hub..."
         docker push nocima/am-fastapi-app:latest
 
-    # 5️⃣ Déployer sur le serveur (exemple SSH)
     - name: Deploy to server
       run: echo "📦 Deploying Docker image on server..."
     - name: SSH deploy

@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/343101670174659579/9d6abe9121a242949235f13a3dbe7492/artifacts
+end_time: 1758034042606
+entry_point_name: ''
+experiment_id: '343101670174659579'
+lifecycle_stage: active
+run_id: 9d6abe9121a242949235f13a3dbe7492
+run_name: learned-grouse-569
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758034032141
+status: 3
+tags: []
+user_id: antoinemalmezac

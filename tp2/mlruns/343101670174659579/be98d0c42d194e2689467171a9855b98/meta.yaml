@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/343101670174659579/be98d0c42d194e2689467171a9855b98/artifacts
+end_time: 1758033918179
+entry_point_name: ''
+experiment_id: '343101670174659579'
+lifecycle_stage: active
+run_id: be98d0c42d194e2689467171a9855b98
+run_name: painted-pug-81
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758033905945
+status: 3
+tags: []
+user_id: antoinemalmezac

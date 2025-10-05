@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/343101670174659579/1c7ed8f1d4944162bdec1656e401569a/artifacts
+end_time: 1758032786908
+entry_point_name: ''
+experiment_id: '343101670174659579'
+lifecycle_stage: active
+run_id: 1c7ed8f1d4944162bdec1656e401569a
+run_name: polite-lynx-686
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758032773566
+status: 3
+tags: []
+user_id: antoinemalmezac
