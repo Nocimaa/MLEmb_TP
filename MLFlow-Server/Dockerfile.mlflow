@@ -1,0 +1,26 @@
+# MLflow léger
+FROM python:3.11-slim
+
+# Dépendances système
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Installer MLflow et extras
+RUN pip install --no-cache-dir mlflow[extras] boto3 scikit-learn
+
+# Répertoire de travail
+WORKDIR /app
+
+# Variables d'environnement pour MLflow
+ENV MLFLOW_TRACKING_URI=sqlite:///app/mlflow.db
+ENV MLFLOW_ARTIFACT_ROOT=s3://mlflow-artifacts
+
+# Lancer le serveur MLflow
+CMD mlflow server \
+    --backend-store-uri $MLFLOW_TRACKING_URI \
+    --default-artifact-root $MLFLOW_ARTIFACT_ROOT \
+    --host 0.0.0.0 \
+    --port 5000
