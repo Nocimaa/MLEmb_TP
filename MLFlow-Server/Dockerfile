@@ -1,32 +1,28 @@
-# Utiliser une image Python officielle légère
+# Utiliser une image Python légère
 FROM python:3.11-slim
 
-# Installer les dépendances système
+# Installer les dépendances système nécessaires
 RUN apt-get update && apt-get install -y \
     build-essential \
     git \
     curl \
+    sqlite3 \
     && rm -rf /var/lib/apt/lists/*
+
+# Installer MLflow et extras pour sklearn
+RUN pip install --no-cache-dir mlflow[extras] scikit-learn
 
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Installer MLflow et ses extras (SQLite, S3, etc.)
-RUN pip install --upgrade pip
-RUN pip install mlflow[extras]
+# Créer les dossiers pour la base de données et les artifacts
+RUN mkdir -p /app/mlflow-artifacts
 
-# Exposer le port de MLflow
-EXPOSE 5000
+# Variables d'environnement MLflow
+ENV MLFLOW_TRACKING_URI=sqlite:///app/mlflow.db
+ENV MLFLOW_ARTIFACT_ROOT=/app/mlflow-artifacts
 
-# Créer les dossiers pour la DB et les artefacts avec permissions
-RUN mkdir -p /mlflow/db /mlflow/artifacts \
-    && chmod -R 777 /mlflow
-
-# Variables d'environnement pour MLflow
-ENV MLFLOW_TRACKING_URI sqlite:////mlflow/db/mlflow.db
-ENV MLFLOW_ARTIFACT_ROOT /mlflow/artifacts
-
-# Commande pour démarrer le serveur MLflow
+# Lancer le serveur MLflow
 CMD mlflow server \
     --backend-store-uri $MLFLOW_TRACKING_URI \
     --default-artifact-root $MLFLOW_ARTIFACT_ROOT \
