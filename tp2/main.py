@@ -48,29 +48,21 @@ pipeline_lr.fit(X_train, y_train)
 accuracy = pipeline_lr.score(X_test, y_test)
 
 print(f"Model accuracy: {accuracy}")
-# Set our tracking server uri for logging
 mlflow.set_tracking_uri(uri="http://127.0.0.1:5000")
 
-# Create a new MLflow Experiment
 mlflow.set_experiment("MlEmb-Insurance")
 
-# Start an MLflow run
 with mlflow.start_run():
-    # Log the hyperparameters
-    # mlflow.log_params(params)
 
-    # Log the loss metric
     mlflow.log_metric("accuracy", accuracy)
 
-    # Infer the model signature
     signature = infer_signature(X_train, pipeline_lr.predict(X_train))
 
     mlflow.log_artifact("encoders.pkl", artifact_path="label_encoders")
 
-    # Log the model, which inherits the parameters and metric
     model_info = mlflow.sklearn.log_model(
         sk_model=pipeline_lr,
-        name="iris_model",
+        name="insurance-model",
         signature=signature,
         input_example=X_train,
         registered_model_name="InsuranceModel"
