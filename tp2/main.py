@@ -1,14 +1,20 @@
 import mlflow
+import mlflow.sklearn
 from mlflow.models import infer_signature
 import pandas as pd
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler,OneHotEncoder
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestRegressor
+import joblib
+import os
 
+mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI")
+
+
+# Load data
 df = pd.read_csv("insurance.csv")
 print(df.head())
 
@@ -25,50 +31,50 @@ numeric_transformer = Pipeline(
     steps=[("scaler", StandardScaler())]
 )
 
-
 preprocessor = ColumnTransformer(
     transformers=[
         ("num", numeric_transformer, numeric_features),
         ("cat", categorical_transformer, categorical_features),
     ]
 )
+
 pipeline_lr = Pipeline(
-    steps=[("preprocessor", preprocessor), ("regressor", RandomForestRegressor(n_estimators=100, random_state=42))]
+    steps=[
+        ("preprocessor", preprocessor),
+        ("regressor", RandomForestRegressor(n_estimators=100, random_state=42))
+    ]
 )
 
-
-
-
+# Train/test split
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
+# Fit model
 pipeline_lr.fit(X_train, y_train)
 
-accuracy = pipeline_lr.score(X_test, y_test)
+# Evaluate
+r2_score = pipeline_lr.score(X_test, y_test)
+print(f"Model R²: {r2_score:.4f}")
 
-print(f"Model accuracy: {accuracy}")
-mlflow.set_tracking_uri(uri="http://127.0.0.1:5000")
-
+# MLflow tracking
+mlflow.set_tracking_uri(mlflow_uri)
 mlflow.set_experiment("MlEmb-Insurance")
 
 with mlflow.start_run():
+    mlflow.log_metric("r2_score", r2_score)
 
-    mlflow.log_metric("accuracy", accuracy)
+    # Save model file and log it
+    joblib.dump(pipeline_lr, "model.pkl")
+    #mlflow.log_artifact("model.pkl", artifact_path="model")
 
     signature = infer_signature(X_train, pipeline_lr.predict(X_train))
-
-    mlflow.log_artifact("encoders.pkl", artifact_path="label_encoders")
-
-    model_info = mlflow.sklearn.log_model(
+    mlflow.sklearn.log_model(
         sk_model=pipeline_lr,
-        name="insurance-model",
+        artifact_path="insurance-model",
         signature=signature,
         input_example=X_train,
         registered_model_name="InsuranceModel"
     )
 
-    # Set a tag that we can use to remind ourselves what this model was for
-    mlflow.set_logged_model_tags(
-        model_info.model_id, {"Training Info": "Basic LR model for insurance data"}
-    )
+    mlflow.set_tag("Training Info", "Basic RandomForest model for insurance data")

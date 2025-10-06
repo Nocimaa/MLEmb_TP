@@ -7,7 +7,11 @@ warnings.filterwarnings(action='ignore', category=UserWarning)
 import pandas as pd
 from pydantic import BaseModel
 
-mlflow.set_tracking_uri(uri="http://127.0.0.1:5000")
+import os
+
+mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI")
+
+mlflow.set_tracking_uri(uri=mlflow_uri)
 
 
 model_name = "InsuranceModel"
@@ -38,7 +42,6 @@ import sklearn.preprocessing as preprocessing
 @app.post("/predict")
 def predict(insurance: Insurance):
 
-    print(insurance.model_dump())
     df = pd.DataFrame(insurance.model_dump(), index=[0])
 
 
@@ -46,7 +49,7 @@ def predict(insurance: Insurance):
     y_pred = model.predict(df)
     return {"prediction": y_pred[0]}
 
-@app.post("/update-model endpoint")
+@app.post("/update-model")
 def update_model(version: Version):
     global model
     model_uri = f"models:/{model_name}/{version.model_version}"
