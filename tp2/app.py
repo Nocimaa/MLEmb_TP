@@ -9,6 +9,8 @@ from pydantic import BaseModel
 
 import os
 
+print("MLFLOW_TRACKING_URI:", os.environ.get("MLFLOW_TRACKING_URI"))
+
 mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI")
 
 mlflow.set_tracking_uri(uri=mlflow_uri)
@@ -19,7 +21,6 @@ model_version = "latest"
 
 model_uri = f"models:/{model_name}/{model_version}"
 model = mlflow.sklearn.load_model(model_uri)
-
 
 app = fastapi.FastAPI()
 
