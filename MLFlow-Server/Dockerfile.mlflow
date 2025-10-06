@@ -17,6 +17,9 @@ WORKDIR /app
 # Variables d'environnement pour MLflow
 ENV MLFLOW_TRACKING_URI=sqlite:////app/mlflow.db
 ENV MLFLOW_ARTIFACT_ROOT=s3://mlflow-artifacts
+ENV AWS_ACCESS_KEY_ID=minioadmin
+ENV AWS_SECRET_ACCESS_KEY=minioadmin
+ENV AWS_ENDPOINT_URL=http://minio:9000
 
 # Lancer le serveur MLflow
 CMD mlflow server \
