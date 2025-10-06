@@ -10,6 +10,8 @@ from pydantic import BaseModel
 import os
 
 print("MLFLOW_TRACKING_URI:", os.environ.get("MLFLOW_TRACKING_URI"))
+artifact_path = "/mlflow/artifacts"
+print("Artefacts disponibles :", os.listdir(artifact_path))
 
 mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI")
 
