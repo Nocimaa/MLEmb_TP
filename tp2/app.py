@@ -9,9 +9,9 @@ from pydantic import BaseModel
 
 import os
 
-print("MLFLOW_TRACKING_URI:", os.environ.get("MLFLOW_TRACKING_URI"))
+print("MLFLOW_TRACKING_URI:", os.environ.get("project.MLFLOW_TRACKING_URI"))
 
-mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI")
+mlflow_uri = os.environ.get("project.MLFLOW_TRACKING_URI")
 
 mlflow.set_tracking_uri(uri=mlflow_uri)
 
